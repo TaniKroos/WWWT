@@ -6,7 +6,7 @@ const Home = () => {
     const navigate = useNavigate();
     function startRegister  ()  {
         console.log('start register')
-        navigate('/register')
+        navigate('/authenticate')
     }
     return (
         <div className="flex items-center justify-center mt-[4rem] ">

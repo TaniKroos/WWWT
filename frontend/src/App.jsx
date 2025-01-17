@@ -1,48 +1,54 @@
-import { useState } from 'react';
-import Home from './pages/Home/Home';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
-import Navigation from './components/shared/navigation/Navigation';
-import Authenticate from './pages/authenticate/Authenticate';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Home from './pages/Home/Home';
+import Navigation from './components/shared/Navigation/Navigation';
+import Authenticate from './pages/Authenticate/Authenticate';
 import Activate from './pages/activate/Activate';
-
+ 
+import Rooms from './pages/Roomss/Rooms';
 function App() {
-  const [count, setCount] = useState(0);
   const isAuth = false;
   const user = {
-    activated: false,
-  };
-
-  return (
-    <>
-      <BrowserRouter>
-        <Navigation />
-        <Routes>
-          <Route path='/' element={<ProtectedHomeRoute isAuth={isAuth} user={user}><Home /></ProtectedHomeRoute>} />
-          <Route path='/authenticate' element={<GuestRoute isAuth={isAuth}><Authenticate /></GuestRoute>} />
-          <Route path='/activate' element={<SemiProtectedRoute isAuth={isAuth} user={user}><Activate /></SemiProtectedRoute>} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  );
+        activated: true,
+  }
+    return (
+        <BrowserRouter>
+            <Navigation />
+            <Routes>
+                <Route path="/" element={<GuestRoute isAuth={isAuth}><Home /></GuestRoute>} />
+                <Route path="/authenticate" element={<GuestRoute><Authenticate /></GuestRoute>} />
+                <Route path="/activate" element={<SemiProtectedRoute isAuth={isAuth} user={user}><Activate /></SemiProtectedRoute>} />
+                <Route path="/rooms" element={<ProtectedRoute isAuth={isAuth} user={user}><Rooms /></ProtectedRoute>} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
-const GuestRoute = ({ isAuth, children }) => {
-  return isAuth ? <Navigate to="/rooms" /> : children;
+const GuestRoute = ({ children,isAuth }) => {
+     
+    return isAuth ? <Navigate to="/rooms" /> : children;
 };
 
-const SemiProtectedRoute = ({ isAuth, user, children }) => {
-  if (!isAuth) {
-    return <Navigate to="/" />;
-  }
-  if (isAuth && user.activated) {
+const SemiProtectedRoute = ({ children,isAuth,user }) => {
+     
+    if (!isAuth) {
+        return <Navigate to="/" />;
+    }
+    if (isAuth && !user.activated) {
+        return children;
+    }
     return <Navigate to="/rooms" />;
-  }
-  return children;
 };
 
-const ProtectedHomeRoute = ({ isAuth, user, children }) => {
-  return isAuth && user.activated ? <Navigate to="/rooms" /> : children;
+const ProtectedRoute = ({ children,isAuth ,user}) => {
+    
+    if (!isAuth) {
+        return <Navigate to="/" />;
+    }
+    if (isAuth && !user.activated) {
+        return <Navigate to="/activate" />;
+    }
+    return children;
 };
 
 export default App;

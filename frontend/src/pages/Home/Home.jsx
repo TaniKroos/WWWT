@@ -15,14 +15,14 @@ const Home = () => {
                 We're working hard to get WWWT ready for everyone!
             </p>
             <div className="flex justify-center py-2">
-                <Button onClick={startRegister}texxt={'Get your username'}>
+                <Button onClick={startRegister}texxt={`Let's Go`}>
 
                 </Button>
             </div>
            
             <div className="text-[16px] mt-1 text-customBlue font-bold">
                 <span >Have an invite text?</span>
-                <Link className="ml-2" to='/login'>  Sign in</Link>
+                
             </div>
             </Card>
         </div>
